@@ -9,10 +9,10 @@ Each queue has one element type. For example, `Queue[int]` stores integers and
 
 ## Install
 
-Once the repository is published and tagged `v0.1.0`, run in your interview project:
+Run in your Go project:
 
 ```sh
-go get github.com/savil/golang/gopq@v0.1.0
+go get github.com/savil/golang/gopq
 ```
 
 Confirm your interview environment allows external packages. If it does not, copy
@@ -104,24 +104,6 @@ improves and skip stale entries when popping. The queue does not expose
 decrease-key or arbitrary removal. It is not safe for concurrent use and should
 not be copied after use.
 
-## Module and publishing
+## License
 
-`gopq` is a package in the `github.com/savil/golang` module. The module's
-`go.mod`, CI workflow, and license live at the repository root. Releases use
-repository-wide tags such as `v0.1.0`; there is no separate `gopq/go.mod`.
-See the [repository README](../README.md) for publishing instructions.
-
-## Test
-
-```sh
-go test ./gopq
-go vet ./gopq
-```
-
-Run these commands from the repository root.
-
-Tests cover min/max ordering, empty queues, duplicates, strings, structs,
-input-slice ownership, reference cleanup, and randomized mixed operations
-checked against a sorted reference model. Runnable examples show common uses.
-
-MIT licensed.
+MIT licensed; see [LICENSE](../LICENSE).

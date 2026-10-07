@@ -1,13 +1,21 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/main/.schema/devbox.schema.json",
-  "packages": [],
+  "packages": [
+    "go@latest",
+    "golangci-lint@latest"
+  ],
   "shell": {
     "init_hook": [
       "echo 'Welcome to devbox!' > /dev/null"
     ],
     "scripts": {
-      "test": [
-        "echo \"Error: no test specified\" && exit 1"
+      "test": "go test -race -cover ./...",
+      "vet": "go vet ./...",
+      "lint": "golangci-lint run --timeout 5m ./...",
+      "check": [
+        "devbox run vet",
+        "devbox run lint",
+        "devbox run test"
       ]
     }
   }

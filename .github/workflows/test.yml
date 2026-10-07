@@ -1,4 +1,4 @@
-name: Go tests
+name: Go checks
 
 on: [push, pull_request]
 
@@ -8,14 +8,11 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go: ['1.18.x', 'stable']
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Install Devbox
+        uses: jetify-com/devbox-install-action@v0.15.0
         with:
-          go-version: ${{ matrix.go }}
-          cache: false
-      - run: go test ./...
-      - run: go vet ./...
+          enable-cache: 'true'
+      - name: Run checks
+        run: devbox run check
