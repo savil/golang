@@ -3,7 +3,7 @@ package gopq_test
 import (
 	"fmt"
 
-	"github.com/savil/gopq"
+	"github.com/savil/golang/gopq"
 )
 
 func ExampleNew() {

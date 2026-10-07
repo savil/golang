@@ -9,10 +9,10 @@ Each queue has one element type. For example, `Queue[int]` stores integers and
 
 ## Install
 
-Once you publish this repository (see below), run in your interview project:
+Once the repository is published and tagged `v0.1.0`, run in your interview project:
 
 ```sh
-go get github.com/savil/gopq@v0.1.0
+go get github.com/savil/golang/gopq@v0.1.0
 ```
 
 Confirm your interview environment allows external packages. If it does not, copy
@@ -25,7 +25,7 @@ package main
 
 import (
     "fmt"
-    "github.com/savil/gopq"
+    "github.com/savil/golang/gopq"
 )
 
 func main() {
@@ -104,33 +104,21 @@ improves and skip stale entries when popping. The queue does not expose
 decrease-key or arbitrary removal. It is not safe for concurrent use and should
 not be copied after use.
 
-## Publish to GitHub
+## Module and publishing
 
-1. Create an empty GitHub repository named `gopq` under `savil`.
-2. From this directory, run:
-
-```sh
-go test ./...
-git init
-git add .
-git commit -m "Add generic priority queue"
-git branch -M main
-git remote add origin https://github.com/savil/gopq.git
-git push -u origin main
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-The module path must match the repository location. The `v0.1.0` tag makes the
-version above available to `go get`. See the official
-[Go module publishing guide](https://go.dev/doc/modules/publishing).
+`gopq` is a package in the `github.com/savil/golang` module. The module's
+`go.mod`, CI workflow, and license live at the repository root. Releases use
+repository-wide tags such as `v0.1.0`; there is no separate `gopq/go.mod`.
+See the [repository README](../README.md) for publishing instructions.
 
 ## Test
 
 ```sh
-go test ./...
-go vet ./...
+go test ./gopq
+go vet ./gopq
 ```
+
+Run these commands from the repository root.
 
 Tests cover min/max ordering, empty queues, duplicates, strings, structs,
 input-slice ownership, reference cleanup, and randomized mixed operations
