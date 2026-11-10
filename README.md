@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-    q := gopq.New(func(a, b int) bool { return a < b }, 5, 1, 3)
+    q := gopq.NewQueue(func(a, b int) bool { return a < b }, 5, 1, 3)
     q.Push(2)
 
     fmt.Println(q.Pop())  // 1 true

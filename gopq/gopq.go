@@ -4,16 +4,16 @@ package gopq
 
 // Queue holds values of type T in priority order.
 //
-// Create a Queue with New. Do not copy a Queue after use. Queues are not safe for
-// concurrent use without external synchronization. Values with equal priority
-// may be popped in any order.
+// Create a Queue with NewQueue. Do not copy a Queue after use. Queues are not
+// safe for concurrent use without external synchronization. Values with equal
+// priority may be popped in any order.
 type Queue[T any] struct {
 	items []T
 	less  func(a, b T) bool
 }
 
-// New creates a queue where less(a, b) reports whether a should be popped before
-// b. Use a < b for a min-heap or a > b for a max-heap of ordered values.
+// NewQueue creates a queue where less(a, b) reports whether a should be popped
+// before b. Use a < b for a min-heap or a > b for a max-heap of ordered values.
 //
 // less must define a strict weak ordering: it must be consistent, transitive,
 // and false for equal values. Do not change priorities or comparison behavior
@@ -21,8 +21,8 @@ type Queue[T any] struct {
 //
 // Optional initial values are copied into a new slice, then heapified in O(n)
 // time. The copy is shallow: pointed-to data remains shared with the caller.
-// New panics if less is nil.
-func New[T any](less func(a, b T) bool, values ...T) *Queue[T] {
+// NewQueue panics if less is nil.
+func NewQueue[T any](less func(a, b T) bool, values ...T) *Queue[T] {
 	if less == nil {
 		panic("gopq: nil comparison function")
 	}
@@ -50,10 +50,10 @@ func (q *Queue[T]) Peek() (T, bool) {
 }
 
 // Push adds a value in O(log n) heap operations, with amortized slice growth.
-// Push panics if the queue was not created with New.
+// Push panics if the queue was not created with NewQueue.
 func (q *Queue[T]) Push(value T) {
 	if q.less == nil {
-		panic("gopq: create the queue with New before pushing")
+		panic("gopq: create the queue with NewQueue before pushing")
 	}
 	q.items = append(q.items, value)
 	for i := len(q.items) - 1; i > 0; {

@@ -31,7 +31,7 @@ func TestOrdering(t *testing.T) {
 				}
 				want := append([]int(nil), tc.values...)
 				sort.Slice(want, func(i, j int) bool { return less(want[i], want[j]) })
-				q := New(less, tc.values...)
+				q := NewQueue(less, tc.values...)
 				for i, expected := range want {
 					if q.Len() != len(want)-i {
 						t.Fatalf("Len() = %d, want %d", q.Len(), len(want)-i)
@@ -65,7 +65,7 @@ func TestMixedOperations(t *testing.T) {
 			less = func(a, b int) bool { return a > b }
 		}
 		rng := rand.New(rand.NewSource(42))
-		q := New(less)
+		q := NewQueue(less)
 		var model []int
 		for step := 0; step < 10000; step++ {
 			if len(model) == 0 || rng.Intn(2) == 0 {
@@ -97,7 +97,7 @@ func TestMixedOperations(t *testing.T) {
 }
 
 func TestAnyType(t *testing.T) {
-	strings := New(func(a, b string) bool { return a < b }, "pear", "apple", "banana")
+	strings := NewQueue(func(a, b string) bool { return a < b }, "pear", "apple", "banana")
 	for _, want := range []string{"apple", "banana", "pear"} {
 		if got, ok := strings.Pop(); !ok || got != want {
 			t.Fatalf("string Pop() = %q, %v; want %q", got, ok, want)
@@ -109,7 +109,7 @@ func TestAnyType(t *testing.T) {
 		path []int
 	}
 	want := node{cost: 1, path: []int{0, 1}}
-	nodes := New(func(a, b node) bool { return a.cost < b.cost },
+	nodes := NewQueue(func(a, b node) bool { return a.cost < b.cost },
 		node{cost: 3, path: []int{0, 2}}, want)
 	if got, ok := nodes.Pop(); !ok || !reflect.DeepEqual(got, want) {
 		t.Fatalf("node Pop() = %v, %v; want %v", got, ok, want)
@@ -118,9 +118,9 @@ func TestAnyType(t *testing.T) {
 
 func TestCopiesInitialSlice(t *testing.T) {
 	values := []int{3, 1, 2}
-	q := New(func(a, b int) bool { return a < b }, values...)
+	q := NewQueue(func(a, b int) bool { return a < b }, values...)
 	if !reflect.DeepEqual(values, []int{3, 1, 2}) {
-		t.Fatalf("New changed input: %v", values)
+		t.Fatalf("NewQueue changed input: %v", values)
 	}
 	values[1] = -100
 	if got, _ := q.Pop(); got != 1 {
@@ -130,7 +130,7 @@ func TestCopiesInitialSlice(t *testing.T) {
 
 func TestPopReleasesReferences(t *testing.T) {
 	a, b := 1, 2
-	q := New(func(a, b *int) bool { return *a < *b }, &a, &b)
+	q := NewQueue(func(a, b *int) bool { return *a < *b }, &a, &b)
 	backing := q.items
 	for q.Len() > 0 {
 		q.Pop()
@@ -143,10 +143,10 @@ func TestPopReleasesReferences(t *testing.T) {
 func TestNilComparatorPanics(t *testing.T) {
 	defer func() {
 		if recover() == nil {
-			t.Fatal("New with nil comparator did not panic")
+			t.Fatal("NewQueue with nil comparator did not panic")
 		}
 	}()
-	New[int](nil)
+	NewQueue[int](nil)
 }
 
 func TestZeroValuePushPanics(t *testing.T) {

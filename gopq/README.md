@@ -29,7 +29,7 @@ import (
 )
 
 func main() {
-    q := gopq.New(func(a, b int) bool { return a < b }, 5, 1, 3)
+    q := gopq.NewQueue(func(a, b int) bool { return a < b }, 5, 1, 3)
     q.Push(2)
 
     for q.Len() > 0 {
@@ -43,7 +43,7 @@ func main() {
 max-heap:
 
 ```go
-q := gopq.New(func(a, b int) bool { return a > b })
+q := gopq.NewQueue(func(a, b int) bool { return a > b })
 q.Push(10)
 q.Push(20)
 value, ok := q.Pop() // 20, true
@@ -53,7 +53,7 @@ _, _ = value, ok
 ## Strings
 
 ```go
-q := gopq.New(func(a, b string) bool { return a < b }, "pear", "apple")
+q := gopq.NewQueue(func(a, b string) bool { return a < b }, "pear", "apple")
 word, ok := q.Pop() // "apple", true (lexicographic ordering)
 _, _ = word, ok
 ```
@@ -66,7 +66,7 @@ type Node struct {
     Distance int
 }
 
-q := gopq.New(func(a, b Node) bool {
+q := gopq.NewQueue(func(a, b Node) bool {
     return a.Distance < b.Distance
 })
 q.Push(Node{ID: 1, Distance: 10})
@@ -83,7 +83,7 @@ you plan to enqueue them. Structs may contain slices or maps: `T` has no
 
 | Operation | Behavior | Time |
 | --- | --- | --- |
-| `New(less, values...)` | Build from optional values; copies the input slice | O(n) |
+| `NewQueue(less, values...)` | Build from optional values; copies the input slice | O(n) |
 | `Push(value)` | Add a value | O(log n), amortized |
 | `Pop()` | Remove highest priority; return `(value, ok)` | O(log n) |
 | `Peek()` | Read highest priority; return `(value, ok)` | O(1) |
@@ -91,7 +91,7 @@ you plan to enqueue them. Structs may contain slices or maps: `T` has no
 
 Uses O(n) storage. An empty `Pop` or `Peek` returns the zero value and `false`,
 so a queued zero is distinguishable from an empty queue. Always construct with
-`New`; a nil comparison function panics.
+`NewQueue`; a nil comparison function panics.
 
 The comparison must be consistent and transitive, and return false for equal
 values. Equal priorities are not FIFO; add a sequence number to the comparison

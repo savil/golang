@@ -6,8 +6,8 @@ import (
 	"github.com/savil/golang/gopq"
 )
 
-func ExampleNew() {
-	q := gopq.New(func(a, b int) bool { return a < b }, 5, 1, 3)
+func ExampleNewQueue() {
+	q := gopq.NewQueue(func(a, b int) bool { return a < b }, 5, 1, 3)
 	q.Push(2)
 	for q.Len() > 0 {
 		value, _ := q.Pop()
@@ -20,26 +20,26 @@ func ExampleNew() {
 	// 5
 }
 
-func ExampleNew_maxHeap() {
-	q := gopq.New(func(a, b int) bool { return a > b }, 5, 1, 3)
+func ExampleNewQueue_maxHeap() {
+	q := gopq.NewQueue(func(a, b int) bool { return a > b }, 5, 1, 3)
 	value, ok := q.Pop()
 	fmt.Println(value, ok)
 	// Output: 5 true
 }
 
-func ExampleNew_strings() {
-	q := gopq.New(func(a, b string) bool { return a < b }, "pear", "apple")
+func ExampleNewQueue_strings() {
+	q := gopq.NewQueue(func(a, b string) bool { return a < b }, "pear", "apple")
 	value, ok := q.Pop()
 	fmt.Println(value, ok)
 	// Output: apple true
 }
 
-func ExampleNew_structs() {
+func ExampleNewQueue_structs() {
 	type Node struct {
 		Name     string
 		Distance int
 	}
-	q := gopq.New(func(a, b Node) bool {
+	q := gopq.NewQueue(func(a, b Node) bool {
 		if a.Distance != b.Distance {
 			return a.Distance < b.Distance
 		}
