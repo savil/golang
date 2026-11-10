@@ -2,12 +2,12 @@
 // comparison function. It has no external dependencies and requires Go 1.18+.
 package gopq
 
-// Queue holds values of type T in priority order.
+// PriorityQueue holds values of type T in priority order.
 //
-// Create a Queue with NewQueue. Do not copy a Queue after use. Queues are not
-// safe for concurrent use without external synchronization. Values with equal
-// priority may be popped in any order.
-type Queue[T any] struct {
+// Create a PriorityQueue with NewQueue. Do not copy a PriorityQueue after use.
+// It is not safe for concurrent use without external synchronization. Values
+// with equal priority may be popped in any order.
+type PriorityQueue[T any] struct {
 	items []T
 	less  func(a, b T) bool
 }
@@ -22,12 +22,12 @@ type Queue[T any] struct {
 // Optional initial values are copied into a new slice, then heapified in O(n)
 // time. The copy is shallow: pointed-to data remains shared with the caller.
 // NewQueue panics if less is nil.
-func NewQueue[T any](less func(a, b T) bool, values ...T) *Queue[T] {
+func NewQueue[T any](less func(a, b T) bool, values ...T) *PriorityQueue[T] {
 	if less == nil {
 		panic("gopq: nil comparison function")
 	}
 	items := append([]T(nil), values...)
-	q := &Queue[T]{items: items, less: less}
+	q := &PriorityQueue[T]{items: items, less: less}
 	for i := len(items)/2 - 1; i >= 0; i-- {
 		q.down(i)
 	}
@@ -35,13 +35,13 @@ func NewQueue[T any](less func(a, b T) bool, values ...T) *Queue[T] {
 }
 
 // Len returns the number of values in the queue in O(1) time.
-func (q *Queue[T]) Len() int {
+func (q *PriorityQueue[T]) Len() int {
 	return len(q.items)
 }
 
 // Peek returns the highest-priority value without removing it in O(1) time.
 // If the queue is empty, it returns the zero value of T and false.
-func (q *Queue[T]) Peek() (T, bool) {
+func (q *PriorityQueue[T]) Peek() (T, bool) {
 	if len(q.items) == 0 {
 		var zero T
 		return zero, false
@@ -51,7 +51,7 @@ func (q *Queue[T]) Peek() (T, bool) {
 
 // Push adds a value in O(log n) heap operations, with amortized slice growth.
 // Push panics if the queue was not created with NewQueue.
-func (q *Queue[T]) Push(value T) {
+func (q *PriorityQueue[T]) Push(value T) {
 	if q.less == nil {
 		panic("gopq: create the queue with NewQueue before pushing")
 	}
@@ -68,7 +68,7 @@ func (q *Queue[T]) Push(value T) {
 
 // Pop removes and returns the highest-priority value in O(log n) time.
 // If the queue is empty, it returns the zero value of T and false.
-func (q *Queue[T]) Pop() (T, bool) {
+func (q *PriorityQueue[T]) Pop() (T, bool) {
 	if len(q.items) == 0 {
 		var zero T
 		return zero, false
@@ -87,7 +87,7 @@ func (q *Queue[T]) Pop() (T, bool) {
 }
 
 // down restores the heap invariant below i: no child precedes its parent.
-func (q *Queue[T]) down(i int) {
+func (q *PriorityQueue[T]) down(i int) {
 	// Only internal nodes have children. This also avoids index overflow.
 	for i < len(q.items)/2 {
 		child := 2*i + 1

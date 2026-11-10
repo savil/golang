@@ -4,8 +4,9 @@ A small, type-safe priority queue for Go interviews. Works with integers,
 strings, structs, pointers, and any other Go type you can supply an ordering for.
 Go 1.18+, no external dependencies.
 
-Each queue has one element type. For example, `Queue[int]` stores integers and
-`Queue[Node]` stores nodes; the same implementation supports both.
+Each queue has one element type. For example, `PriorityQueue[int]` stores
+integers and `PriorityQueue[Node]` stores nodes; the same implementation
+supports both.
 
 ## Install
 

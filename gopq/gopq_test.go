@@ -155,6 +155,6 @@ func TestZeroValuePushPanics(t *testing.T) {
 			t.Fatal("zero-value Push did not panic")
 		}
 	}()
-	var q Queue[int]
+	var q PriorityQueue[int]
 	q.Push(1)
 }
